@@ -14,14 +14,6 @@ type server struct {
 	router *mux.Router
 }
 
-func (s *server) Routes() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
-	router.HandleFunc("/sensors", SensorIndex)
-	router.HandleFunc("/sensors/{date}", SensorStats)
-	s.router = router
-}
-
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	s.router.ServeHTTP(w, r)
 }
@@ -40,13 +32,12 @@ func main() {
 }
 
 func run() error {
-	db, err := InitDB()
-	if err != nil {
+	if err := InitDB(); err != nil {
 		return err
 	}
-	defer db.Close()
-	server := newServer(db)
+	defer DB.Close()
 
+	server := newServer(DB)
 	fmt.Fprintf(os.Stdout, "%s\n", "Listening on port 8080... Ctrl+C to stop")
 	return http.ListenAndServe(":8080", server.router)
 }
