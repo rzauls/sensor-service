@@ -50,7 +50,6 @@ func SensorIndex(w http.ResponseWriter, r *http.Request) {
 // SensorStats - fetch min and max sensor values on specific date
 func SensorStats(w http.ResponseWriter, r *http.Request) {
 	data, err := GetAllSensorMinMaxOnDate(mux.Vars(r)["date"], DB)
-	// TODO die on error?
 	if err != nil {
 		log.Fatalf("%s\n", err)
 	}
