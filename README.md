@@ -68,7 +68,7 @@ Requirements:
    ...
  ```
 
-# Show all sensor newest measurements
+# Show all sensor min/max measurements on specific date
  
  Get the details of all sensors in the database, and fetch the minimal and maximal reading on a specific date.
  The date format should be `YYYY-MM-DD`, `YYYY-MM` or `YYYY`.
