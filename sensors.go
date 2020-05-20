@@ -65,9 +65,9 @@ func GetAnyNewestReading(db *sql.DB) ([]Sensor, error) {
 			" LEFT JOIN main.measures mes ON mes.sensor_id = sens.sensor_id " +
 			" LEFT JOIN main.metrics met ON met.metric_id = mes.metric_id " +
 			" LEFT JOIN main.units u ON u.unit_id = met.unit_id " +
-			" WHERE sens.sensor_id = " + strconv.Itoa(id) +
+			" WHERE sens.sensor_id = ? " +
 			" GROUP BY met.metric_id " +
-			" ORDER BY rtime DESC")
+			" ORDER BY rtime DESC", strconv.Itoa(id))
 		if err != nil {
 			return nil, err
 
@@ -139,10 +139,10 @@ func GetAllSensorMinMaxOnDate(date string, db *sql.DB) ([]SensorMinMax, error) {
 			" LEFT JOIN main.measures mes ON mes.sensor_id = sens.sensor_id " +
 			" LEFT JOIN main.metrics met ON met.metric_id = mes.metric_id " +
 			" LEFT JOIN main.units u ON u.unit_id = met.unit_id " +
-			" WHERE sens.sensor_id = " + strconv.Itoa(id) +
-			" AND rtime LIKE '%" + date + "%' " + //TODO: sanitize date string
+			" WHERE sens.sensor_id = ?" +
+			" AND rtime LIKE '%' || ? || '%' " +
 			" GROUP BY u.unit_id " +
-			" ORDER BY mes.rvalue DESC")
+			" ORDER BY mes.rvalue DESC",  strconv.Itoa(id), date)
 		if err != nil {
 			return nil, err
 
