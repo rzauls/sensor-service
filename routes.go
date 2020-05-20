@@ -41,9 +41,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 // SensorIndex - fetch newest reading from every sensor
 func SensorIndex(w http.ResponseWriter, r *http.Request) {
 	data, err := GetAnyNewestReading(DB)
-	// TODO die on error?
 	if err != nil {
-		log.Printf("%s\n", err)
+		log.Fatalf("%s\n", err)
 	}
 	json.NewEncoder(w).Encode(data)
 }
@@ -53,7 +52,7 @@ func SensorStats(w http.ResponseWriter, r *http.Request) {
 	data, err := GetAllSensorMinMaxOnDate(mux.Vars(r)["date"], DB)
 	// TODO die on error?
 	if err != nil {
-		log.Printf("%s\n", err)
+		log.Fatalf("%s\n", err)
 	}
 	json.NewEncoder(w).Encode(data)
 }
