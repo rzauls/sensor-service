@@ -2,11 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
-	"net/http"
-	"os"
-
 	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
 type server struct {
@@ -26,8 +24,7 @@ func newServer(db *sql.DB) *server {
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
+		log.Fatalf("%s\n", err)
 	}
 }
 
@@ -38,6 +35,6 @@ func run() error {
 	defer DB.Close()
 
 	server := newServer(DB)
-	fmt.Fprintf(os.Stdout, "%s\n", "Listening on port 8080... Ctrl+C to stop")
+	log.Printf("Listening on port 8080...")
 	return http.ListenAndServe(":8080", server.router)
 }
