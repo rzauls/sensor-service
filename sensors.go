@@ -43,6 +43,8 @@ func GetAnyNewestReading(db *sql.DB) ([]Sensor, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer sensorIds.Close()
+
 	var data []Sensor
 	for sensorIds.Next() {
 		var (
@@ -98,6 +100,8 @@ func GetAnyNewestReading(db *sql.DB) ([]Sensor, error) {
 				})
 			}
 		}
+		rows.Close()
+		
 		data = append(data, Sensor{
 			SensorId: id,
 			Name:     name,
@@ -115,6 +119,8 @@ func GetAllSensorMinMaxOnDate(date string, db *sql.DB) ([]SensorMinMax, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer sensorIds.Close();
+
 	var data []SensorMinMax
 	for sensorIds.Next() {
 		var (
@@ -143,6 +149,7 @@ func GetAllSensorMinMaxOnDate(date string, db *sql.DB) ([]SensorMinMax, error) {
 			" AND rtime LIKE '%' || ? || '%' " +
 			" GROUP BY u.unit_id " +
 			" ORDER BY mes.rvalue DESC",  strconv.Itoa(id), date)
+
 		if err != nil {
 			return nil, err
 
@@ -175,6 +182,8 @@ func GetAllSensorMinMaxOnDate(date string, db *sql.DB) ([]SensorMinMax, error) {
 				})
 			}
 		}
+		rows.Close()
+
 		data = append(data, SensorMinMax{
 			SensorId: id,
 			Name:     name,
